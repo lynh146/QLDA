@@ -10,5 +10,5 @@ $sql = "UPDATE thoitiet
         SET Ngay='$ngay', NhietDo='$nhietdo', LuongMua='$luongmua', DoAm='$doam' 
         WHERE MaTT='$id'";
 
-echo ($conn->query($sql)) ? "success" : "error";
+echo ($conn->query($sql)) ? "✅ Đã sửa thành công" : "❌ error";
 ?>

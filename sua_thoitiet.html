@@ -8,36 +8,66 @@
 </head>
 <body class="container mt-4">
 
-  <h3>Sửa dữ liệu thời tiết</h3>
-  <form id="frm">
-    <input type="hidden" name="MaTT" id="MaTT">
-    <input type="date" name="Ngay" id="Ngay" class="form-control mb-2">
-    <input type="text" name="NhietDo" id="NhietDo" class="form-control mb-2">
-    <input type="text" name="LuongMua" id="LuongMua" class="form-control mb-2">
-    <input type="text" name="DoAm" id="DoAm" class="form-control mb-2">
-    <button class="btn btn-primary">Lưu</button>
+  <h3 class="mb-3">Sửa dữ liệu thời tiết</h3>
+
+  <form id="editForm">
+    <input type="hidden" id="MaTT" name="MaTT">
+
+    <div class="mb-3">
+      <label>Mã Lô:</label>
+      <input type="text" id="MaLo" name="MaLo" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Ngày:</label>
+      <input type="date" id="Ngay" name="Ngay" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Nhiệt độ:</label>
+      <input type="number" step="0.1" id="NhietDo" name="NhietDo" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Lượng mưa:</label>
+      <input type="number" step="0.1" id="LuongMua" name="LuongMua" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Độ ẩm:</label>
+      <input type="number" step="0.1" id="DoAm" name="DoAm" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
   </form>
 
 <script>
-const urlParams = new URLSearchParams(window.location.search);
-const id = urlParams.get('id');
+$(document).ready(function(){
+  const params = new URLSearchParams(window.location.search);
+  const MaTT = params.get("id");
 
-$.get("../php/api_lay_thong_tin_thoitiet.php", function(res){
-  let data = JSON.parse(res).find(x=>x.MaTT==id);
-  if(data){
-    $("#MaTT").val(data.MaTT);
-    $("#Ngay").val(data.Ngay);
-    $("#NhietDo").val(data.NhietDo);
-    $("#LuongMua").val(data.LuongMua);
-    $("#DoAm").val(data.DoAm);
-  }
-});
+  // Lấy dữ liệu cũ để hiển thị
+  $.get("php/api_lay_thong_tin_thoitiet.php", function(response){
+    const data = JSON.parse(response);
+    const item = data.find(row => row.MaTT === MaTT);
 
-$("#frm").submit(function(e){
-  e.preventDefault();
-  $.post("../php/api_sua_thoitiet.php", $(this).serialize(), function(res){
-    alert(res);
-    window.location.href = "lay_thong_tin_thoitiet.html";
+    if(item){
+      $("#MaTT").val(item.MaTT);
+      $("#MaLo").val(item.MaLo);
+      $("#Ngay").val(item.Ngay);
+      $("#NhietDo").val(item.NhietDo);
+      $("#LuongMua").val(item.LuongMua);
+      $("#DoAm").val(item.DoAm);
+    }
+  });
+
+  // Gửi dữ liệu cập nhật
+  $("#editForm").submit(function(e){
+    e.preventDefault();
+    $.post("php/api_sua_thoitiet.php", $(this).serialize(), function(res){
+      alert(res);
+      window.location.href = "lay_thong_tin_thoitiet.html";
+    });
   });
 });
 </script>
