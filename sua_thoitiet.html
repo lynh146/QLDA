@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sửa dữ liệu thời tiết</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container mt-4">
+
+  <h3>Sửa dữ liệu thời tiết</h3>
+  <form id="frm">
+    <input type="hidden" name="MaTT" id="MaTT">
+    <input type="date" name="Ngay" id="Ngay" class="form-control mb-2">
+    <input type="text" name="NhietDo" id="NhietDo" class="form-control mb-2">
+    <input type="text" name="LuongMua" id="LuongMua" class="form-control mb-2">
+    <input type="text" name="DoAm" id="DoAm" class="form-control mb-2">
+    <button class="btn btn-primary">Lưu</button>
+  </form>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const id = urlParams.get('id');
+
+$.get("../php/api_lay_thong_tin_thoitiet.php", function(res){
+  let data = JSON.parse(res).find(x=>x.MaTT==id);
+  if(data){
+    $("#MaTT").val(data.MaTT);
+    $("#Ngay").val(data.Ngay);
+    $("#NhietDo").val(data.NhietDo);
+    $("#LuongMua").val(data.LuongMua);
+    $("#DoAm").val(data.DoAm);
+  }
+});
+
+$("#frm").submit(function(e){
+  e.preventDefault();
+  $.post("../php/api_sua_thoitiet.php", $(this).serialize(), function(res){
+    alert(res);
+    window.location.href = "lay_thong_tin_thoitiet.html";
+  });
+});
+</script>
+
+</body>
+</html>
