@@ -47,8 +47,8 @@ $(document).ready(function(){
   const MaTT = params.get("id");
 
   // Lấy dữ liệu cũ để hiển thị
-  $.get("php/api_lay_thong_tin_thoitiet.php", function(response){
-    const data = JSON.parse(response);
+  $.get("php/api_lay_thong_tin_thoitiet.php", function(data){
+    // const data = JSON.parse(response);
     const item = data.find(row => row.MaTT === MaTT);
 
     if(item){
@@ -64,6 +64,7 @@ $(document).ready(function(){
   // Gửi dữ liệu cập nhật
   $("#editForm").submit(function(e){
     e.preventDefault();
+     console.log($(this).serialize());
     $.post("php/api_sua_thoitiet.php", $(this).serialize(), function(res){
       alert(res);
       window.location.href = "lay_thong_tin_thoitiet.html";
