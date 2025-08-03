@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thêm Phân Bón</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+  <h3 class="mb-3">Thêm Phân Bón</h3>
+
+  <form action="php/them_phanbon.php" method="post">
+    <div class="mb-3"><label>Mã Phân</label><input type="text" name="MaPhan" class="form-control" required></div>
+    <div class="mb-3"><label>Mã Lô</label><input type="text" name="MaLo" class="form-control"></div>
+    <div class="mb-3"><label>Tên Phân</label><input type="text" name="TenPhan" class="form-control"></div>
+    <div class="mb-3"><label>Số lượng</label><input type="number" step="0.01" name="SoLuong" class="form-control"></div>
+    <div class="mb-3"><label>Đơn vị</label><input type="text" name="DonVi" class="form-control"></div>
+    <div class="mb-3"><label>Ngày sử dụng</label><input type="date" name="NgaySD" class="form-control"></div>
+    <button class="btn btn-success">Thêm</button>
+    <a href="danh_sach_phanbon.html" class="btn btn-secondary">Quay lại</a>
+  </form>
+
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sửa Phân Bón</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container mt-4">
+
+  <h3 class="mb-3">Sửa Phân Bón</h3>
+
+  <form action="php/sua_phanbon.php" method="post">
+    <div class="mb-3"><label>Mã Phân</label><input type="text" id="MaPhan" name="MaPhan" class="form-control" readonly></div>
+    <div class="mb-3"><label>Mã Lô</label><input type="text" id="MaLo" name="MaLo" class="form-control"></div>
+    <div class="mb-3"><label>Tên Phân</label><input type="text" id="TenPhan" name="TenPhan" class="form-control"></div>
+    <div class="mb-3"><label>Số lượng</label><input type="number" step="0.01" id="SoLuong" name="SoLuong" class="form-control"></div>
+    <div class="mb-3"><label>Đơn vị</label><input type="text" id="DonVi" name="DonVi" class="form-control"></div>
+    <div class="mb-3"><label>Ngày sử dụng</label><input type="date" id="NgaySD" name="NgaySD" class="form-control"></div>
+    <button class="btn btn-primary">Lưu</button>
+    <a href="danh_sach_phanbon.html" class="btn btn-secondary">Quay lại</a>
+  </form>
+
+<script>
+$(document).ready(function(){
+  const id = new URLSearchParams(window.location.search).get("id");
+  $.getJSON("php/lay_thong_tin_phanbon.php", function(data){
+    const item = data.find(x => x.MaPhan === id);
+    if (!item) return alert("Không tìm thấy dữ liệu");
+    $("#MaPhan").val(item.MaPhan);
+    $("#MaLo").val(item.MaLo);
+    $("#TenPhan").val(item.TenPhan);
+    $("#SoLuong").val(item.SoLuong);
+    $("#DonVi").val(item.DonVi);
+    $("#NgaySD").val(item.NgaySD);
+  });
+});
+</script>
+
+</body>
+</html>
