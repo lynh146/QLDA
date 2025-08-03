@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sửa Thiết Bị</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container mt-4">
+
+  <h3 class="mb-3">Sửa Thiết Bị</h3>
+
+  <form action="php/sua_thietbi.php" method="post">
+    <div class="mb-3"><label>Mã TB</label><input type="text" id="MaTB" name="MaTB" class="form-control" readonly></div>
+    <div class="mb-3"><label>Mã Vườn</label><input type="text" id="MaVuon" name="MaVuon" class="form-control"></div>
+    <div class="mb-3"><label>Tên Thiết Bị</label><input type="text" id="TenTB" name="TenTB" class="form-control"></div>
+    <div class="mb-3"><label>Loại Thiết Bị</label><input type="text" id="LoaiTB" name="LoaiTB" class="form-control"></div>
+    <div class="mb-3"><label>Ngày Cài Đặt</label><input type="date" id="NgayCaiDat" name="NgayCaiDat" class="form-control"></div>
+    <div class="mb-3"><label>Trạng Thái</label><input type="text" id="TrangThai" name="TrangThai" class="form-control"></div>
+    <button class="btn btn-primary">Lưu</button>
+    <a href="danh_sach_thietbi.html" class="btn btn-secondary">Quay lại</a>
+  </form>
+
+<script>
+$(document).ready(function(){
+  const id = new URLSearchParams(window.location.search).get("id");
+  $.getJSON("php/lay_thong_tin_thietbi.php", function(data){
+    const tb = data.find(x => x.MaTB === id);
+    if (!tb) return alert("Không tìm thấy dữ liệu");
+    $("#MaTB").val(tb.MaTB);
+    $("#MaVuon").val(tb.MaVuon);
+    $("#TenTB").val(tb.TenTB);
+    $("#LoaiTB").val(tb.LoaiTB);
+    $("#NgayCaiDat").val(tb.NgayCaiDat);
+    $("#TrangThai").val(tb.TrangThai);
+  });
+});
+</script>
+
+</body>
+</html>

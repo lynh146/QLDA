@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thêm Nông Dân</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+  <h3 class="mb-3">Thêm Nông Dân</h3>
+
+  <form action="php/them_nongdan.php" method="post">
+    <div class="mb-3">
+      <label>Mã ND</label>
+      <input type="text" name="MaND" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label>Tên ND</label>
+      <input type="text" name="TenND" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>CCCD</label>
+      <input type="text" name="CCCD" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>Địa chỉ</label>
+      <input type="text" name="DiaChi" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>Số điện thoại</label>
+      <input type="text" name="SDT" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-success">Thêm</button>
+    <a href="danh_sach_nongdan.html" class="btn btn-secondary">Quay lại</a>
+  </form>
+
+</body>
+</html>
