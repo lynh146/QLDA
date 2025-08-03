@@ -1,0 +1,29 @@
+<?php
+include "connect.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST['MaTruyXuat'] ?? '';
+    $malo = $_POST['MaLo'] ?? '';
+    $thongtin = $_POST['ThongTin'] ?? '';
+    $ngaytruyxuat = $_POST['NgayTruyXuat'] ?? '';
+
+    if (empty($id) || empty($malo) || empty($thongtin)) {
+        echo "❌ Thiếu dữ liệu!";
+        exit;
+    }
+
+    $sql = "UPDATE truyxuat 
+            SET MaLo='$malo', ThongTin='$thongtin', NgayTruyXuat='$ngaytruyxuat' 
+            WHERE MaTruyXuat='$id'";
+
+    if ($conn->query($sql) === TRUE) {
+        if ($conn->affected_rows > 0) {
+            echo "✅ Đã sửa thành công!";
+        } else {
+            echo "⚠ Không có thay đổi (dữ liệu có thể trùng).";
+        }
+    } else {
+        echo "❌ Lỗi SQL: " . $conn->error;
+    }
+}
+?>
