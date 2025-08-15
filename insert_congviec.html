@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Thêm CONGVIEC</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+  <h2>Thêm CONGVIEC</h2>
+  <form action="php/api_them_congviec.php" method="POST">
+    <div class="mb-3"><label for="MaCV">MaCV</label><input type="text" name="MaCV" id="MaCV" class="form-control" required></div>
+    <div class="mb-3"><label for="MaLo">MaLo</label><input type="text" name="MaLo" id="MaLo" class="form-control" required></div>
+    <div class="mb-3"><label for="TenCV">TenCV</label><input type="text" name="TenCV" id="TenCV" class="form-control" required></div>
+    <div class="mb-3"><label for="NgayBD">NgayBD</label><input type="date" name="NgayBD" id="NgayBD" class="form-control" required></div>
+    <div class="mb-3"><label for="NgayKT">NgayKT</label><input type="date" name="NgayKT" id="NgayKT" class="form-control" required></div>
+    <div class="mb-3"><label for="TrangThai">TrangThai</label><input type="text" name="TrangThai" id="TrangThai" class="form-control" required></div>
+    <div class="mb-3"><label for="GhiChu">GhiChu</label><textarea name="GhiChu" id="GhiChu" class="form-control" required></textarea></div>
+    <button type="submit" class="btn btn-success">Thêm</button>
+    <a href="lay_thong_tin_congviec.html" class="btn btn-secondary">Quay lại</a>
+  </form>
+</body>
+</html>
