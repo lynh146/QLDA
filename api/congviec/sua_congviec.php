@@ -1,0 +1,46 @@
+<?php
+session_start();
+require __DIR__ . '/../../config/connect.php';
+
+if (!isset($_SESSION['id'])) {
+    echo "Chưa đăng nhập";
+    exit;
+}
+
+$role = $_SESSION['role'];
+$maND = $_SESSION['id'];
+
+$maCV = $_POST['MaCV'] ?? '';
+$maLo = $_POST['MaLo'] ?? '';
+$tenCV = $_POST['TenCV'] ?? '';
+$ngayBD = $_POST['NgayBD'] ?? '';
+$ngayKT = $_POST['NgayKT'] ?? '';
+$trangThai = $_POST['TrangThai'] ?? '';
+$ghiChu = $_POST['GhiChu'] ?? '';
+
+try {
+    if ($role !== 'admin') {
+        // Kiểm tra công việc có thuộc Nông dân này không
+        $check = $conn->prepare("SELECT v.MaND 
+                                 FROM congviec c
+                                 JOIN losx l ON c.MaLo = l.MaLo
+                                 JOIN vuon v ON l.MaVuon = v.MaVuon
+                                 WHERE c.MaCV = ?");
+        $check->execute([$maCV]);
+        $row = $check->fetch();
+        if (!$row || $row['MaND'] !== $maND) {
+            echo "Bạn không có quyền sửa công việc này";
+            exit;
+        }
+    }
+
+    $sql = "UPDATE congviec 
+            SET MaLo=?, TenCV=?, NgayBD=?, NgayKT=?, TrangThai=?, GhiChu=? 
+            WHERE MaCV=?";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute([$maLo, $tenCV, $ngayBD, $ngayKT, $trangThai, $ghiChu, $maCV]);
+
+    echo "OK";
+} catch (PDOException $e) {
+    echo "Lỗi: " . $e->getMessage();
+}
