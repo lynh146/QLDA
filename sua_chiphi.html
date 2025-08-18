@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sửa CHIPHI</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container mt-4">
+
+  <h3 class="mb-3">Sửa CHIPHI</h3>
+
+  <form action="php/api_sua_chiphi.php" method="post">
+    <div class="mb-3">
+      <label>MaCP</label>
+      <input type="text" id="MaCP" name="MaCP" class="form-control" readonly>
+    </div>
+    <div class="mb-3">
+      <label>MaVuon</label>
+      <input type="text" id="MaVuon" name="MaVuon" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>LoaiCP</label>
+      <input type="text" id="LoaiCP" name="LoaiCP" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>SoTien</label>
+      <input type="number" id="SoTien" name="SoTien" class="form-control">
+    </div>
+    <div class="mb-3">
+      <label>NgayPhat</label>
+      <input type="date" id="NgayPhat" name="NgayPhat" class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a href="lay_thong_tin_chiphi.html" class="btn btn-secondary">Quay lại</a>
+  </form>
+
+<script>
+$(document).ready(function(){
+  const id = new URLSearchParams(window.location.search).get("id");
+  $.getJSON("php/api_lay_thong_tin_chiphi.php", function(data){
+    const item = data.find(x => x.MaCP === id);
+    if (!item) {
+      alert("Không tìm thấy bản ghi");
+      return window.location.href = "lay_thong_tin_chiphi.html";
+    }
+    $("#MaCP").val(item.MaCP);
+    $("#MaVuon").val(item.MaVuon);
+    $("#LoaiCP").val(item.LoaiCP);
+    $("#SoTien").val(item.SoTien);
+    $("#NgayPhat").val(item.NgayPhat);
+  });
+});
+</script>
+
+</body>
+</html>
