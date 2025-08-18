@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý Nông dân - Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body { background-color: #f8f9fc; }
+    .sidebar { min-height: 100vh; background-color: #0d6efd; }
+    .sidebar .nav-link { color: #fff; font-weight: 500; }
+    .sidebar .nav-link.active { background-color: rgba(255,255,255,0.2); border-radius: .25rem; }
+  </style>
+</head>
+<body>
+
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar p-3">
+    <h4 class="text-white mb-4"><i class="fa-solid fa-user-shield me-2"></i>Admin</h4>
+    <nav class="nav flex-column">
+      <a class="nav-link" href="dashboard.html"><i class="fa-solid fa-gauge me-2"></i>Dashboard</a>
+      <a class="nav-link active" href="danh_sach_nongdan.html"><i class="fa-solid fa-users me-2"></i>Quản lý Nông dân</a>
+      <a class="nav-link" href="danh_sach_vuon.html"><i class="fa-solid fa-tree me-2"></i>Quản lý Vườn</a>
+      <a class="nav-link" href="danh_sach_losx.html"><i class="fa-solid fa-lemon me-2"></i>Quản lý Lô SX</a>
+      <a class="nav-link" href="danh_sach_thuhoach.html"><i class="fa-solid fa-basket-shopping me-2"></i>Thu hoạch</a>
+      <a class="nav-link" href="danh_sach_giong.html"><i class="fa-solid fa-seedling me-2"></i>Giống cây</a>
+      <a class="nav-link" href="danh_sach_phanbon.html"><i class="fa-solid fa-flask me-2"></i>Phân bón</a>
+      <a class="nav-link" href="danh_sach_thuoc.html"><i class="fa-solid fa-spray-can me-2"></i>Thuốc</a>
+      <a class="nav-link" href="danh_sach_thietbi.html"><i class="fa-solid fa-gear me-2"></i>Thiết bị</a>
+      <a class="nav-link" href="danh_sach_baocao.html"><i class="fa-solid fa-file-alt me-2"></i>Báo cáo</a>
+      <a class="nav-link" href="danh_sach_chiphi.html"><i class="fa-solid fa-coins me-2"></i>Chi phí</a>
+      <a class="nav-link" href="danh_sach_truyxuat.html"><i class="fa-solid fa-barcode me-2"></i>Truy xuất</a>
+      <a class="nav-link" href="danh_sach_licht.html"><i class="fa-solid fa-calendar-days me-2"></i>Lịch canh tác</a>
+      <a class="nav-link text-warning mt-3" href="../../php/logout.php"><i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất</a>
+    </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1 p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h3 class="text-primary"><i class="fa-solid fa-users me-2"></i>Danh sách Nông dân</h3>
+    </div>
+
+    <div class="mb-3">
+      <button class="btn btn-primary" id="btnAdd">+ Thêm Nông dân</button>
+    </div>
+
+    <table class="table table-bordered text-center align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Mã ND</th>
+          <th>Họ tên</th>
+          <th>CCCD</th>
+          <th>Địa chỉ</th>
+          <th>SĐT</th>
+          <th>Email</th>
+            <th>Username</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="data"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ndModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form id="frmND">
+        <div class="modal-header">
+          <h5 class="modal-title">Thêm/Sửa Nông dân</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="MaND" id="MaND">
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Họ tên</label>
+              <input type="text" class="form-control" name="TenND" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">CCCD</label>
+              <input type="text" class="form-control" name="CCCD" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Địa chỉ</label>
+              <input type="text" class="form-control" name="DiaChi" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Số điện thoại</label>
+              <input type="text" class="form-control" name="SDT" required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email</label>
+              <input type="email" class="form-control" name="Email" required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-control" name="Username" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const tbody = document.getElementById('data');
+const modal = new bootstrap.Modal(document.getElementById('ndModal'));
+const frm = document.getElementById('frmND');
+
+// Load danh sách
+function loadData(){
+  $.getJSON("../../api/nongdan/lay_thong_tin_nongdan.php")
+    .done(function(rows){
+      tbody.innerHTML = "";
+      if(rows.error){
+        tbody.innerHTML = `<tr><td colspan="9" class="text-danger">❌ ${rows.error}</td></tr>`;
+        return;
+      }
+      if(rows.length === 0){
+        tbody.innerHTML = `<tr><td colspan="9" class="text-muted">Chưa có dữ liệu</td></tr>`;
+        return;
+      }
+      rows.forEach(r=>{
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${r.MaND}</td>
+          <td>${r.TenND}</td>
+          <td>${r.CCCD}</td>
+          <td>${r.DiaChi}</td>
+          <td>${r.SDT}</td>
+          <td>${r.Email}</td>
+          <td>${r.Username}</td>
+          <td>
+            <button class="btn btn-sm btn-primary btnEdit">Sửa</button>
+            <button class="btn btn-sm btn-danger btnDel">Xóa</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        tr.querySelector(".btnEdit").onclick = ()=>{
+          frm.MaND.value = r.MaND;
+          frm.TenND.value = r.TenND;
+          frm.CCCD.value = r.CCCD;
+          frm.DiaChi.value = r.DiaChi;
+          frm.SDT.value = r.SDT;
+          frm.Email.value = r.Email;
+          frm.Username.value = r.Username;
+          modal.show();
+        };
+
+        tr.querySelector(".btnDel").onclick = ()=>{
+          if(confirm("Bạn có chắc muốn xóa nông dân này?")){
+            $.post("../../api/nongdan/xoa_nongdan.php", { MaND: r.MaND }, ()=> loadData());
+          }
+        };
+      });
+    })
+    .fail(function(err){
+      console.error("❌ Lỗi API:", err);
+      tbody.innerHTML = `<tr><td colspan="9" class="text-danger">❌ Lỗi tải dữ liệu</td></tr>`;
+    });
+}
+loadData();
+
+$("#btnAdd").click(()=>{
+  frm.reset();
+  frm.MaND.value="";
+  modal.show();
+});
+
+$("#frmND").submit(function(e){
+  e.preventDefault();
+  let fd = $(this).serializeArray();
+  let url = frm.MaND.value ? "../../api/nongdan/sua_nongdan.php" : "../../api/nongdan/them_nongdan.php";
+  $.post(url, $.param(fd), function(res){
+    if(res.indexOf("✅") !== -1 || res==="OK"){
+      alert(res);
+      modal.hide();
+      loadData();
+    } else {
+      alert(res);
+    }
+  });
+});
+</script>
+</body>
+</html>

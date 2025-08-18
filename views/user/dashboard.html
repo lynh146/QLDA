@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard Nông dân</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<style>
+body { background-color: #f8f9fc; }
+.sidebar { min-height: 100vh; background-color: #198754; }
+.sidebar .nav-link { color: #fff; font-weight: 500; }
+.sidebar .nav-link.active, .sidebar .nav-link:hover { background-color: rgba(255,255,255,0.2); border-radius: .25rem; }
+.card-stat { border-left: .25rem solid #198754; box-shadow: 0 0.15rem 1.75rem 0 rgba(58,59,69,.15); transition: transform .2s; }
+.card-stat:hover { transform: scale(1.03); }
+.card-stat h6 { font-weight: 700; text-transform: uppercase; font-size: .8rem; color: #198754; }
+</style>
+</head>
+<body>
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar p-3">
+        <h4 class="text-white mb-4"><i class="fa-solid fa-leaf me-2"></i>Chôm Chôm </h4>
+        <nav class="nav flex-column">
+            <a class="nav-link active" href="/QLVT1/views/user/dashboard.html"><i class="fa-solid fa-gauge me-2"></i>Dashboard</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_vuon.html"><i class="fa-solid fa-tree me-2"></i>Quản lý Vườn</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_losx.html"><i class="fa-solid fa-lemon me-2"></i>Quản lý Lô SX</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_thuhoach.html"><i class="fa-solid fa-basket-shopping me-2"></i>Thu hoạch</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_congviec.html"><i class="fa-solid fa-list-check me-2"></i>Công việc</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_nhatky.html"><i class="fa-solid fa-book me-2"></i>Nhật ký sản xuất</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_giong.html"><i class="fa-solid fa-seedling me-2"></i>Giống cây</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_phanbon.html"><i class="fa-solid fa-flask me-2"></i>Phân bón</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_thuoc.html"><i class="fa-solid fa-spray-can me-2"></i>Thuốc</a>
+            <a class="nav-link" href="/QLVT1/views/user/danh_sach_thietbi.html"><i class="fa-solid fa-gear me-2"></i>Thiết bị</a>
+            <a class="nav-link" href="danh_sach_chiphi.html"><i class="fa-solid fa-coins me-2"></i>Chi phí</a>
+          <a class="nav-link" href="danh_sach_baocao.html"><i class="fa-solid fa-file-alt me-2"></i>Báo cáo</a>
+  <!-- Logout -->
+  <a class="nav-link text-warning mt-3" href="/QLVT1/php/logout.php">
+    <i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất
+  </a>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-4">
+        <h2 class="mb-4 fw-bold text-success"><i class="fa-solid fa-gauge me-2"></i>Bảng điều khiển</h2>
+        
+        <!-- Stats Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card card-stat p-3 text-center">
+                    <h6>Vườn</h6>
+                    <div class="h3 fw-bold" id="statVuon">-</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stat p-3 text-center">
+                    <h6>Lô SX</h6>
+                    <div class="h3 fw-bold" id="statLo">-</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stat p-3 text-center">
+                    <h6>Thu hoạch (kg)</h6>
+                    <div class="h3 fw-bold" id="statThuHoach">-</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-stat p-3 text-center">
+                    <h6>Công việc tuần</h6>
+                    <div class="h3 fw-bold" id="statCongViec">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Card -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="fw-bold text-success">Xin chào, <span id="farmerName">Nông dân</span>!</h5>
+                <p>Bảng điều khiển này hiển thị thông tin tổng quan và liên kết đến các chức năng quản lý của bạn.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+fetch("../../api/user/get_stats.php")
+  .then(res => res.json())
+  .then(data => {
+    if(data.error){
+      alert("⚠ " + data.error);
+      return;
+    }
+    document.getElementById('statVuon').textContent = data.vuon ?? 0;
+    document.getElementById('statLo').textContent = data.losx ?? 0;
+    document.getElementById('statThuHoach').textContent = data.thuhoach ?? 0;
+    document.getElementById('statCongViec').textContent = data.congviec ?? 0;
+    document.getElementById('farmerName').textContent = data.name ?? "Nông dân";
+  })
+  .catch(err => {
+    console.error(err);
+    alert("❌ Lỗi tải dữ liệu Dashboard!");
+  });
+</script>
+
+</body>
+</html>

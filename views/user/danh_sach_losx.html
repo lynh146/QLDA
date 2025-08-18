@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý Lô SX</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body { background-color: #f8f9fc; }
+    .sidebar { min-height: 100vh; background-color: #198754; }
+    .sidebar .nav-link { color: #fff; font-weight: 500; }
+    .sidebar .nav-link.active { background-color: rgba(255,255,255,0.2); border-radius: .25rem; }
+  </style>
+</head>
+<body>
+
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar p-3">
+      <h4 class="text-white mb-4"><i class="fa-solid fa-leaf me-2"></i>Nông dân</h4>
+      <nav class="nav flex-column">
+          <a class="nav-link" href="dashboard.html"><i class="fa-solid fa-gauge me-2"></i>Dashboard</a>
+          <a class="nav-link" href="danh_sach_vuon.html"><i class="fa-solid fa-tree me-2"></i>Quản lý Vườn</a>
+          <a class="nav-link active" href="danh_sach_losx.html"><i class="fa-solid fa-lemon me-2"></i>Quản lý Lô SX</a>
+          <a class="nav-link" href="danh_sach_thuhoach.html"><i class="fa-solid fa-basket-shopping me-2"></i>Thu hoạch</a>
+          <a class="nav-link" href="danh_sach_congviec.html"><i class="fa-solid fa-list-check me-2"></i>Công việc</a>
+          <a class="nav-link" href="danh_sach_nhatky.html"><i class="fa-solid fa-book me-2"></i>Nhật ký sản xuất</a>
+          <a class="nav-link" href="danh_sach_giong.html"><i class="fa-solid fa-seedling me-2"></i>Giống cây</a>
+          <a class="nav-link" href="danh_sach_phanbon.html"><i class="fa-solid fa-flask me-2"></i>Phân bón</a>
+          <a class="nav-link" href="danh_sach_thuoc.html"><i class="fa-solid fa-spray-can me-2"></i>Thuốc</a>
+          <a class="nav-link" href="danh_sach_thietbi.html"><i class="fa-solid fa-gear me-2"></i>Thiết bị</a>
+          <a class="nav-link" href="danh_sach_chiphi.html"><i class="fa-solid fa-coins me-2"></i>Chi phí</a>
+          <a class="nav-link" href="danh_sach_baocao.html"><i class="fa-solid fa-file-alt me-2"></i>Báo cáo</a>
+
+          <a class="nav-link text-warning mt-3" href="/QLVT1/php/logout.php"><i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất</a>
+      </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-grow-1 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-success">📋 Danh sách Lô sản xuất</h3>
+      </div>
+
+      <div class="mb-3">
+        <button class="btn btn-success" id="btnAdd">+ Thêm Lô SX</button>
+      </div>
+
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th>Mã Lô</th>
+            <th>Vườn</th>
+            <th>Giống</th>
+            <th>Diện Tích</th>
+            <th>Ngày BĐ</th>
+            <th>Ngày KT</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody id="data"></tbody>
+      </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="losxModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="frmLosx">
+        <div class="modal-header">
+          <h5 class="modal-title">Thêm/Sửa Lô SX</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="MaLo" id="MaLo">
+
+          <div class="mb-3">
+            <label class="form-label">Chọn Vườn</label>
+            <select name="MaVuon" class="form-control" id="selVuon" required></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Chọn Giống</label>
+            <select name="MaGiong" class="form-control" id="selGiong" required></select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Diện tích (m²)</label>
+            <input type="number" class="form-control" name="DienTich" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ngày BĐ</label>
+            <input type="datetime-local" class="form-control" name="NgayBD" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Ngày KT</label>
+            <input type="datetime-local" class="form-control" name="NgayKT" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const tbody = document.getElementById('data');
+const modal = new bootstrap.Modal(document.getElementById('losxModal'));
+const frm = document.getElementById('frmLosx');
+
+// Load danh sách Lô SX
+function loadData(){
+  $.getJSON("../../api/losx/lay_thong_tin_losx.php")
+    .done(function(rows){
+      tbody.innerHTML = "";
+      if(rows.error){
+        tbody.innerHTML = `<tr><td colspan="7" class="text-danger">❌ ${rows.error}</td></tr>`;
+        return;
+      }
+      if(rows.length === 0){
+        tbody.innerHTML = `<tr><td colspan="7" class="text-muted">Chưa có dữ liệu</td></tr>`;
+        return;
+      }
+
+      rows.forEach(r=>{
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${r.MaLo}</td>
+          <td>${r.MaVuon}</td>
+          <td>${r.MaGiong}</td>
+          <td>${r.DienTich}</td>
+          <td>${r.NgayBD}</td>
+          <td>${r.NgayKT}</td>
+          <td>
+            <button class="btn btn-sm btn-primary btnEdit">Sửa</button>
+            <button class="btn btn-sm btn-danger btnDel">Xóa</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+
+        // Edit
+        tr.querySelector(".btnEdit").onclick = ()=>{
+          frm.MaLo.value = r.MaLo;
+          frm.MaVuon.value = r.MaVuon;
+          frm.MaGiong.value = r.MaGiong;
+          frm.DienTich.value = r.DienTich;
+          frm.NgayBD.value = r.NgayBD.replace(" ", "T");
+          frm.NgayKT.value = r.NgayKT.replace(" ", "T");
+          modal.show();
+        };
+
+        // Delete
+        tr.querySelector(".btnDel").onclick = ()=>{
+          if(confirm("Bạn có chắc muốn xóa lô SX này?")){
+            $.post("../../api/losx/xoa_losx.php", { MaLo: r.MaLo }, ()=> loadData());
+          }
+        };
+      });
+    })
+    .fail(function(err){
+      console.error("❌ Lỗi API:", err);
+      tbody.innerHTML = `<tr><td colspan="7" class="text-danger">❌ Lỗi tải dữ liệu</td></tr>`;
+    });
+}
+loadData();
+
+// Load danh sách Vườn & Giống vào select
+function loadSelects(){
+  $.getJSON("../../api/vuon/lay_thong_tin_vuon.php", data=>{
+    $("#selVuon").html(data.map(v=>`<option value="${v.MaVuon}">${v.TenVuon}</option>`));
+  });
+  $.getJSON("../../api/giong/lay_thong_tin_giong.php", data=>{
+    $("#selGiong").html(data.map(g=>`<option value="${g.MaGiong}">${g.TenGiong}</option>`));
+  });
+}
+loadSelects();
+
+// Nút thêm mới
+$("#btnAdd").click(()=>{
+  frm.reset();
+  frm.MaLo.value="";
+  modal.show();
+});
+
+// Submit form
+$("#frmLosx").submit(function(e){
+  e.preventDefault();
+  let fd = $(this).serializeArray();
+  fd = fd.map(f=>{
+    if(f.name==="NgayBD" || f.name==="NgayKT"){
+      f.value = f.value.replace("T"," ") + ":00";
+    }
+    return f;
+  });
+  let url = frm.MaLo.value ? "../../api/losx/sua_losx.php" : "../../api/losx/them_losx.php";
+$.post(url, $(this).serialize(), res=>{
+    if(res.indexOf("✅") !== -1){
+        alert(res); // Hiện đúng "✅ Thêm thành công"
+        modal.hide();
+        loadData();
+    } else {
+        alert(res); // Hiện lỗi kèm ❌
+    }
+});
+
+});
+</script>
+</body>
+</html>
