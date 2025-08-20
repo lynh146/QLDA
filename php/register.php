@@ -38,18 +38,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $num = $last ? (int)substr($last, 2) + 1 : 1;
     $maND = 'ND' . str_pad($num, 3, '0', STR_PAD_LEFT);
 
-    // 5. Thêm vào DB
+    // 🔑 5. Mã hóa mật khẩu
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    // 6. Thêm vào DB
     $sql = "INSERT INTO nongdan (MaND, TenND, CCCD, DiaChi, SDT, Email, Username, MatKhau) 
             VALUES (?,?,?,?,?,?,?,?)";
     $stmt = $conn->prepare($sql);
 
     try {
-        $stmt->execute([$maND, $tenND, $cccd, $diaChi, $sdt, $email, $username, $password]);
-        // Sau khi đăng ký xong thì chuyển qua login
+        $stmt->execute([$maND, $tenND, $cccd, $diaChi, $sdt, $email, $username, $hashedPassword]);
         header("Location: ../views/login.html?registered=1");
         exit;
     } catch (PDOException $e) {
         die("❌ Lỗi khi đăng ký: " . $e->getMessage());
     }
 }
-?>

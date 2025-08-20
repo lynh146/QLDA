@@ -9,8 +9,8 @@ if (!isset($_SESSION['id'])) {
 
 try {
     // Chỉ lấy thông tin cần thiết, KHÔNG lấy mật khẩu
-    $sql = "SELECT MaND, TenND, CCCD, DiaChi, SDT, Email, Username 
-            FROM nongdan";
+    $sql = "SELECT MaLich, MaVuon, ThoiGian, CongViec, TrangThai
+            FROM lichct";
     $stmt = $conn->query($sql);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($rows, JSON_UNESCAPED_UNICODE);

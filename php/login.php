@@ -11,7 +11,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute([$username]);
 $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($admin && $password === $admin['MatKhau']) {
+if ($admin && password_verify($password, $admin['MatKhau'])) {
     $_SESSION['role'] = 'admin';
     $_SESSION['id'] = $admin['MaAdmin'];
     $_SESSION['name'] = $admin['TenAdmin'];
@@ -25,7 +25,7 @@ $stmt = $conn->prepare($sql);
 $stmt->execute([$username]);
 $nd = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($nd && $password === $nd['MatKhau']) {
+if ($nd && password_verify($password, $nd['MatKhau'])) {
     $_SESSION['role'] = 'nongdan';
     $_SESSION['id'] = $nd['MaND'];
     $_SESSION['name'] = $nd['TenND'];
