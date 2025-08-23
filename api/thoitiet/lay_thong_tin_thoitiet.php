@@ -3,50 +3,44 @@ session_start();
 require __DIR__ . '/../../config/connect.php';
 
 if (!isset($_SESSION['id'])) {
-    echo json_encode(["error" => "Chưa đăng nhập"]);
+    echo json_encode(["error" => "❌ Chưa đăng nhập"]);
     exit;
 }
 
-try {
-    $role = $_SESSION['role'];
+$role = $_SESSION['role'];
+$maND = $_SESSION['id'];
 
+try {
     if ($role === 'admin') {
-        // Admin xem tất cả + join sang losx và vuon để lấy MaVuon
         $sql = "SELECT 
                     t.MaTT, 
                     t.MaLo, 
-                    l.MaVuon, 
-                    v.TenVuon, 
-                    n.TenND,
+                    l.MaVuon,         -- thêm ở đây
                     t.Ngay, 
                     t.NhietDo, 
                     t.LuongMua, 
-                    t.DoAm
+                    t.DoAm,
+                    v.TenVuon, 
+                    n.TenND
                 FROM thoitiet t
                 JOIN losx l ON t.MaLo = l.MaLo
                 JOIN vuon v ON l.MaVuon = v.MaVuon
-                JOIN nongdan n ON v.MaND = n.MaND
-                ORDER BY t.Ngay DESC";
+                JOIN nongdan n ON v.MaND = n.MaND";
         $stmt = $conn->query($sql);
     } else {
-        // Nông dân chỉ xem được lô thuộc vườn của mình
-        $maND = $_SESSION['id'];
         $sql = "SELECT 
                     t.MaTT, 
                     t.MaLo, 
-                    l.MaVuon, 
-                    v.TenVuon, 
-                    n.TenND,
+                    l.MaVuon,         -- thêm ở đây
                     t.Ngay, 
                     t.NhietDo, 
                     t.LuongMua, 
-                    t.DoAm
+                    t.DoAm,
+                    v.TenVuon
                 FROM thoitiet t
                 JOIN losx l ON t.MaLo = l.MaLo
                 JOIN vuon v ON l.MaVuon = v.MaVuon
-                JOIN nongdan n ON v.MaND = n.MaND
-                WHERE n.MaND = ?
-                ORDER BY t.Ngay DESC";
+                WHERE v.MaND = ?";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$maND]);
     }
